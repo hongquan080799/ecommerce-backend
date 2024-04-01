@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Package Lock Files
+package-lock.json
+yarn.lock
+
+# OS Specific Files
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# IDE Specific Files
+# (adjust based on your IDE)
+.idea/
+.vscode/
+
+# Temporary Files
+*.pid
+.npm
+
+# Testing Coverage
+coverage/
+
+# Logs
+*.log
+
+# dotenv environment files
+.env*
