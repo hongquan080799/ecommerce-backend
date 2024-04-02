@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const fileRouter = require('./routes/fileRoute')
 import {verifyConnection} from './config/MysqlConfig'
+import { findById } from './service/CategoryService';
 import myLogger from './utils/myLogger'
 
 // Execute a SQL query
@@ -26,9 +27,9 @@ app.use(require('cors')())
 
 
 app.use('/file', fileRouter)
-
-
 verifyConnection()
+
+findById(1).then(res => console.log(res)).catch(err => console.log(err));
 
 // listen port
 const PORT = process.env.PORT || 8080;

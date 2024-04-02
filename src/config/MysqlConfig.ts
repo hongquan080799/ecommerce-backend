@@ -25,18 +25,29 @@ async function verifyConnection() {
 }
 
 
-async function queryDatabase(sql: string) {
+export const executeQuery = async (sql: string) => {
   try {
     const connection = await pool.getConnection();
-    const [results] = await connection.query(sql);
-    console.log(results);
+    const res = await connection.query(sql);
     connection.release(); // Release the connection back to the pool
+    return res
   } catch (err) {
-    console.error(err);
+    throw err
   }
 }
 
-export {queryDatabase, verifyConnection}
+export const executeWithParams = async (sql: string, params: Array<any>) => {
+  try {
+    const connection = await pool.getConnection();
+    const res = await connection.query(sql, params);
+    connection.release(); // Release the connection back to the pool
+    return res
+  } catch (err) {
+    throw err
+  }
+}
+
+export {verifyConnection}
 
 
 
