@@ -28,3 +28,44 @@ export const findById = async (id: number) : Promise<Category> => {
         }
     })
 }
+
+export const saveCategory = async (category: Category) : Promise<any> => {
+    return new Promise<any>(async (resolve, reject) => {
+        try {
+            const [result] = await executeWithParams("insert into category (name, image_url, parent_id) values(?,?,?)", [category.name, category.imageUrl,category.parentId])
+            resolve(result)
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+export const updateCategory = async (category: Category) : Promise<any> => {
+    return new Promise<any>(async (resolve, reject) => {
+        try {
+            // check if category already exists
+            const [rows] = await executeWithParams("select * from category where id =?", [category.id])
+            if (rows && (rows as []).length > 0) {
+                const [result] = await executeWithParams("update category set name =?, image_url =? where id =?", [category.name, category.imageUrl, category.id])
+                resolve(result)
+            } else {
+                reject(new Error("Could not find categories with id: " + category.id))
+            }
+            const [result] = await executeWithParams("insert into category (name, image_url, parent_id)", [category.name, category.imageUrl, category.parentId])
+            resolve(result)
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+export const deleteCategory = async (id: number) : Promise<any> => {
+    return new Promise<any>(async (resolve, reject) => {
+        try {
+            const [result] = await executeWithParams("delete from category where id =?", [id])
+            resolve(result)
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
