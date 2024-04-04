@@ -1,9 +1,16 @@
 import { executeQuery, executeWithParams } from "../config/MysqlConfig"
 import * as categoryMapper from "../mappers/CategoryMapper"
 import { Category } from "../model/Category";
-export const findAll = async () : Promise<Category[]> => {
+export const findAll = async (query: any) : Promise<Category[]> => {
     return new Promise<Category[]>(async (resolve, reject) => {
         try {
+            if (Object.keys(query).length > 0) {
+                const [result] = await executeWithParams("select * from category where parent_id = ?", [query['parentId']])
+                if (result) {
+                    resolve(categoryMapper.fromDBToModelList(result as []))
+                }
+                return
+            }
             const [result] = await executeQuery("select * from category")
             if (result) {
                 resolve(categoryMapper.fromDBToModelList(result as []))
