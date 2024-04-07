@@ -8,6 +8,8 @@ const fileRouter = require('./routes/fileRoute')
 import {verifyConnection} from './config/MysqlConfig'
 import myLogger from './utils/myLogger'
 import categoryRouter from './routes/CategoryRoute'
+import brandRouter from './routes/BrandRoute'
+import productRouter from './routes/ProductRoute'
 // Execute a SQL query
 const app = express();
 // app.use(express.json())
@@ -27,6 +29,8 @@ app.use(require('cors')())
 
 app.use('/file', fileRouter)
 app.use('/category', categoryRouter)
+app.use('/brand', brandRouter)
+app.use('/product', productRouter)
 verifyConnection()
 
 
