@@ -11,7 +11,7 @@ export const findAll = async (query: any) : Promise<Category[]> => {
                 }
                 return
             }
-            const [result] = await executeQuery("select * from category")
+            const [result] = await executeQuery("select * from category where parent_id is null",)
             if (result) {
                 resolve(categoryMapper.fromDBToModelList(result as []))
             }
