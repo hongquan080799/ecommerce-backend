@@ -15,4 +15,6 @@ export type Product = {
     createdBy: string;
     updatedAt: Date;
     updatedBy: string;
+    categoryName: string;
+    brandName: string;
 }

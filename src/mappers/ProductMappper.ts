@@ -17,7 +17,9 @@ export const fromDBToModel = (result: any): Product => {
         createdAt: new Date(result.created_at),
         updatedAt: new Date(result.updated_at),
         createdBy: result.created_by,
-        updatedBy: result.updated_by
+        updatedBy: result.updated_by,
+        brandName: result.brand_name,
+        categoryName: result.category_name
     };
 }
 

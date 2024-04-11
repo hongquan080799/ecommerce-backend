@@ -7,6 +7,7 @@ router.post('/upload', (req, res) => {
     //fs.WriteStream(req.files.file)
     const uniqueId = crypto.randomBytes(20).toString('hex')
     try {
+        console.log(req.files.file)
         const data = req.files.file
         const filePath = "public/images/" + uniqueId + "_" + data?.name.toString().split('.')[0] + "." + data?.name.toString().split('.')[1];
         const stream = fs.createWriteStream('src/' + filePath)
