@@ -1,6 +1,7 @@
 import { executeQuery, executeWithParams } from "../config/MysqlConfig"
 import { Product } from "../model/Product"
 import * as productMapper from "../mappers/ProductMappper"
+import { PopularProductWithCat } from "../types/PopularProductWithCat"
 export const findAll = async (query: any) : Promise<Product[]> => {
     return new Promise<Product[]>(async (resolve, reject) => {
         try {
@@ -80,7 +81,7 @@ export const updateProduct = async (product: Product) : Promise<any> => {
                 "UPDATE product " +
                 "SET name = ?, description = ?, technical_info = ?, product_info = ?," +
                     "price = ?, category_id = ?, brand_id = ?, images = ?,"+
-                    "status = ?, quantity = ?, discount = ? "
+                    "status = ?, quantity = ?, discount = ? " +
                 "WHERE id = ?"
                 const [result] = await executeWithParams(sql, 
                     [
@@ -112,6 +113,43 @@ export const deleteProduct = async (id: number) : Promise<any> => {
         try {
             const [result] = await executeWithParams("delete from product where id =?", [id])
             resolve(result)
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+export const getProductPopularsByCategory = async () : Promise<PopularProductWithCat[]> => {
+    return new Promise<PopularProductWithCat[]>(async (resolve, reject) => {
+        try {
+            const query = `
+            SELECT 
+                c.id AS categoryId,
+                c.name AS categoryName,
+                c.image_url AS categoryImageUrl,
+                s.id AS subCategoryId,
+                s.name AS subCategoryName,
+                s.image_url AS subCategoryImageUrl,
+                p.id AS productId,
+                p.name AS productName,
+                p.images AS productImages,
+                p.price AS productPrice,
+                p.discount AS productDiscount,
+                b.id AS brandId,
+                b.name AS brandName
+            FROM 
+                category c
+            LEFT JOIN 
+                category s ON c.id = s.parent_id
+            LEFT JOIN 
+                product p ON s.id = p.category_id
+            LEFT JOIN 
+                brand b ON p.brand_id = b.id
+        `;
+            const [result] = await executeQuery(query)
+            if (result) {
+                resolve(productMapper.fromDBPopularProductWithCat(result))
+            }
         } catch (err) {
             reject(err)
         }

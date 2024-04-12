@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 
 router.put('/', async (req, res) => {
     try {
-        const category = await service.saveProduct(req.body)
+        const category = await service.updateProduct(req.body)
         res.status(200).json(category)
     } catch(err: any) {
         res.status(500).send({
@@ -66,5 +66,15 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.get('/product-with-cat/all', async (req, res) => {
+    try {
+        const result = await service.getProductPopularsByCategory()
+        res.status(200).json(result)
+    } catch(err: any) {
+        res.status(500).send({
+            message: err.message,
+        })
+    }
+});
 
 export default router
