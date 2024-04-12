@@ -69,7 +69,7 @@ export const fromDBPopularProductWithCat = (results: any) => {
             const productWithCat: ProductWithCat = {
                 id: productId,
                 name: productName,
-                images: productImages ? productImages.split(',') : [],
+                images: productImages ? JSON.parse(productImages) : [],
                 price: productPrice,
                 discount: productDiscount,
                 brand: {
