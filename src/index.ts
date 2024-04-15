@@ -10,6 +10,7 @@ import myLogger from './utils/myLogger'
 import categoryRouter from './routes/CategoryRoute'
 import brandRouter from './routes/BrandRoute'
 import productRouter from './routes/ProductRoute'
+import userRouter from './routes/UserRoute'
 // Execute a SQL query
 const app = express();
 // app.use(express.json())
@@ -31,6 +32,7 @@ app.use('/file', fileRouter)
 app.use('/category', categoryRouter)
 app.use('/brand', brandRouter)
 app.use('/product', productRouter)
+app.use('/user', userRouter)
 verifyConnection()
 
 

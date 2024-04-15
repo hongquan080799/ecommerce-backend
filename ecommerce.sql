@@ -49,3 +49,23 @@ FROM
     LEFT JOIN category s ON c.id = s.parent_id
     LEFT JOIN product p ON s.id = p.category_id
     LEFT JOIN brand b ON p.brand_id = b.id;
+
+CREATE TABLE user (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100), first_name VARCHAR(100), last_name VARCHAR(100), email VARCHAR(100), address VARCHAR(500), avatar TEXT, role_id BIGINT, active BOOLEAN, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+alter table user add column phone_number VARCHAR(20);
+
+create table role (
+    id BIGINT PRIMARY KEY auto_increment, name varchar(100), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+);
+
+insert into role (name) values ("ADMIN");
+
+insert into role (name) values ("EMPLOYEE");
+
+insert into role (name) values ("USER");
+
+insert into
+    user (username, password, role_id)
+values ("ADMIN", "123", 1);
