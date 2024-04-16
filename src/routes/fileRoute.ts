@@ -1,7 +1,9 @@
-const router = require('express').Router()
-const fs = require('fs')
+import {Router} from 'express'
+import fs from 'fs'
 const crypto = require('crypto')
-router.post('/upload', (req, res) => {
+
+const router = Router()
+router.post('/upload', (req: any, res) => {
    // fs.writeFileSync(req.files.file.data)
    //req.get('host') 
     //fs.WriteStream(req.files.file)
@@ -19,10 +21,10 @@ router.post('/upload', (req, res) => {
         })
         
         
-    } catch (error) {
+    } catch (error: any) {
         res.json({message : "Write file failed : " + error.message})
     }
 })
 
 
-module.exports = router
+export default router

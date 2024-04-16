@@ -4,13 +4,14 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
-const fileRouter = require('./routes/fileRoute')
+
 import {verifyConnection} from './config/MysqlConfig'
 import myLogger from './utils/myLogger'
 import categoryRouter from './routes/CategoryRoute'
 import brandRouter from './routes/BrandRoute'
 import productRouter from './routes/ProductRoute'
 import userRouter from './routes/UserRoute'
+import fileRouter from './routes/fileRoute'
 // Execute a SQL query
 const app = express();
 // app.use(express.json())

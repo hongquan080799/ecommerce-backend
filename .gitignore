@@ -12,7 +12,7 @@ Desktop.ini
 
 # macOS
 .DS_Store
-
+/build
 # IDE Specific Files
 # (adjust based on your IDE)
 .idea/
