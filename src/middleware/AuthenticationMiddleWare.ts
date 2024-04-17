@@ -5,9 +5,9 @@ export const authenticationToken = (req: any, res:any, next:any) =>{
     const token = authHeader.split(' ')[1]
     if(token == null) return res.sendStatus(401)
 
-    jwt.verify(token, process.env.JWT_SCRETE_KEY, (err:any, user: any) =>{
+    jwt.verify(token, process.env.JWT_SCRETE_KEY, (err:any, res: any) =>{
         if(err) return res.sendStatus(403)
-        req.user = user
+        req.user = res.data
         next()
     })
 }

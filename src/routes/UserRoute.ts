@@ -17,6 +17,19 @@ router.get('/',authenticationToken, async (req, res) => {
   }
 })
 
+router.get('/info',authenticationToken, async (req: any, res) => {
+  try {
+    logger.info('Get user info')
+    const user = req.user
+    console.log(user)
+    const userInfo = await service.findByUserName(user.username)
+
+    res.json(userInfo)
+  } catch (error: any) {
+    res.json({message : error.message})
+  }
+})
+
 router.post('/', authenticationToken, async (req: any, res) =>{
   try {
     if(req.user?.data[0].role == 'admin') {

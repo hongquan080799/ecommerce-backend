@@ -17,7 +17,7 @@ export const findAll = async () : Promise<User[]> => {
 export const findByUserName = async (username: string) : Promise<User> => {
     return new Promise<User>(async (resolve, reject) => {
         try {
-            const [rows] = await executeWithParams("select * from user where username = ?", [username])
+            const [rows] = await executeWithParams("select u.*, r.id as role_id, r.name as role_name from user u join role r on u.role_id = r.id where u.username = ?", [username])
             if (rows && (rows as []).length > 0) {
                 resolve(userMapper.fromDBToModel((rows as any)[0]))
             } else {
