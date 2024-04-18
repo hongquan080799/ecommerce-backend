@@ -21,10 +21,31 @@ router.get('/info',authenticationToken, async (req: any, res) => {
   try {
     logger.info('Get user info')
     const user = req.user
-    console.log(user)
     const userInfo = await service.findByUserName(user.username)
-
     res.json(userInfo)
+  } catch (error: any) {  
+    console.log(error)
+    throw error
+  }
+})
+
+router.get('/info/:username',authenticationToken, async (req: any, res) => {
+  try {
+    logger.info('Get user info')
+    const userInfo = await service.findByUserName(req.params.username)
+    res.json(userInfo)
+  } catch (error: any) {  
+    console.log(error)
+    throw error
+  }
+})
+
+router.get('/role', async (req, res) => {
+  try {
+    logger.info('Get list role')
+    const roleList = await service.findListRole()
+
+    res.json(roleList)
   } catch (error: any) {
     res.json({message : error.message})
   }
@@ -32,14 +53,29 @@ router.get('/info',authenticationToken, async (req: any, res) => {
 
 router.post('/', authenticationToken, async (req: any, res) =>{
   try {
-    if(req.user?.data[0].role == 'admin') {
+    logger.info('Save user data')
+    const user = req.user
+    if(user.role.name !== 'ADMIN') {
         throw new Error(`User not admin`)
     }
-    logger.info('Save user data')
     const saveData = await service.saveUser(req.body)
     res.json(saveData)
   } catch (error:any) {
-    res.json({message : error.message})
+    throw error
+  }
+})
+
+router.put('/', authenticationToken, async (req: any, res) =>{
+  try {
+    logger.info('update user data')
+    const user = req.user
+    if(user.role.name !== 'ADMIN') {
+        throw new Error(`User not admin`)
+    }
+    const saveData = await service.updateUser(req.body)
+    res.json(saveData)
+  } catch (error:any) {
+    throw error
   }
 })
 

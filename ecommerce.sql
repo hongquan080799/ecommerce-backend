@@ -54,6 +54,10 @@ CREATE TABLE user (
     id BIGINT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100), first_name VARCHAR(100), last_name VARCHAR(100), email VARCHAR(100), address VARCHAR(500), avatar TEXT, role_id BIGINT, active BOOLEAN, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+alter table user add column avatar text;
+
+alter table user add column active BOOLEAN;
+
 alter table user add column phone_number VARCHAR(20);
 
 create table role (
@@ -68,4 +72,6 @@ insert into role (name) values ("USER");
 
 insert into
     user (username, password, role_id)
-values ("ADMIN", "123", 1);
+values ("ADMIN2", "123", 1);
+
+select * from user;
