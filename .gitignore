@@ -13,6 +13,7 @@ Desktop.ini
 # macOS
 .DS_Store
 /build
+/public
 # IDE Specific Files
 # (adjust based on your IDE)
 .idea/

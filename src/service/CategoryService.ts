@@ -1,6 +1,7 @@
 import { executeQuery, executeWithParams } from "../config/MysqlConfig"
 import * as categoryMapper from "../mappers/CategoryMapper"
 import { Category } from "../model/Category";
+import { CatTree } from "../types/Category";
 export const findAll = async (query: any) : Promise<Category[]> => {
     return new Promise<Category[]>(async (resolve, reject) => {
         try {
@@ -71,6 +72,31 @@ export const deleteCategory = async (id: number) : Promise<any> => {
         try {
             const [result] = await executeWithParams("delete from category where id =?", [id])
             resolve(result)
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+export const findCategoryTreeBySubId = async (id: number): Promise<CatTree> => {
+    return new Promise<CatTree>(async (resolve, reject) => {
+        try {
+            const [rows] = await executeWithParams("select * from category where id = ?", [id])
+            if (rows && (rows as []).length > 0) {
+                const childRow = (rows as any)[0]
+                const result = await executeWithParams("select * from category where id = ?", [childRow.parent_id])
+                const parentRow = (result[0] as any)[0]
+                const resultChild = await executeWithParams("select * from category where parent_id = ?", [parentRow.id])
+                const chileRows = resultChild[0] as []
+                const returnResult: CatTree = {
+                    id: parentRow.id,
+                    imageUrl: parentRow.image_url,
+                    name: parentRow.name,
+                    subCategory: chileRows
+                }
+                resolve(returnResult)
+            } else {
+                reject(new Error("Could not find categories with id: " + id))
+            }
         } catch (err) {
             reject(err)
         }

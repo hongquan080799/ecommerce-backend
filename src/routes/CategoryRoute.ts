@@ -66,5 +66,16 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.get("/cat-tree/:id", async (req, res) => {
+    try {
+        const result = await service.findCategoryTreeBySubId(Number((req.params.id)))
+        res.json(result)
+    } catch (error: any) {
+        res.status(500).send({
+            message: error.message,
+        })
+    }
+
+})
 
 export default router
