@@ -2,6 +2,8 @@ import { executeQuery, executeWithParams } from "../config/MysqlConfig"
 import * as categoryMapper from "../mappers/CategoryMapper"
 import { Category } from "../model/Category";
 import { CatTree } from "../types/Category";
+import * as productMapper from "../mappers/ProductMappper"
+import * as bramdMapper from "../mappers/BrandMapper"
 export const findAll = async (query: any) : Promise<Category[]> => {
     return new Promise<Category[]>(async (resolve, reject) => {
         try {
@@ -87,11 +89,16 @@ export const findCategoryTreeBySubId = async (id: number): Promise<CatTree> => {
                 const parentRow = (result[0] as any)[0]
                 const resultChild = await executeWithParams("select * from category where parent_id = ?", [parentRow.id])
                 const chileRows = resultChild[0] as []
+                const productByCat = await executeWithParams("select p.*, b.name as brand_name from product p join brand b on p.brand_id = b.id where p.category_id = ?", [id] )
+                const brandList = await executeWithParams("select b.id, b.name, b.image_url from product p join brand b on p.brand_id = b.id where p.category_id = 4 group by b.id, b.name, b.image_url", [id] )
                 const returnResult: CatTree = {
                     id: parentRow.id,
                     imageUrl: parentRow.image_url,
                     name: parentRow.name,
-                    subCategory: chileRows
+                    subCategory: chileRows,
+                    productWithCat: productMapper.fromDBToModelList(productByCat[0] as any),
+                    brandList: bramdMapper.fromDBToModelList(brandList[0] as any),
+
                 }
                 resolve(returnResult)
             } else {
