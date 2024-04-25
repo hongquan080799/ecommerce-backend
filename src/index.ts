@@ -12,6 +12,7 @@ import brandRouter from './routes/BrandRoute'
 import productRouter from './routes/ProductRoute'
 import userRouter from './routes/UserRoute'
 import fileRouter from './routes/fileRoute'
+import bannerRouter from './routes/BannerRoute'
 // Execute a SQL query
 const app = express();
 // app.use(express.json())
@@ -34,6 +35,7 @@ app.use('/category', categoryRouter)
 app.use('/brand', brandRouter)
 app.use('/product', productRouter)
 app.use('/user', userRouter)
+app.use('/banner', bannerRouter)
 verifyConnection()
 
 
