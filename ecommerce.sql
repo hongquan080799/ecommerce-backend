@@ -2,66 +2,56 @@ create database ecommerce;
 
 use ecommerce;
 
-create table category (
-    id bigint primary key auto_increment, name varchar(500), image_url text, parent_id bigint
+DROP TABLE IF EXISTS `brand`;
+
+CREATE TABLE `brand` (
+    `id` bigint NOT NULL AUTO_INCREMENT, `name` varchar(500) DEFAULT NULL, `image_url` text, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `created_by` varchar(255) DEFAULT NULL, `updated_by` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`)
 );
 
-ALTER TABLE category
-ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-ADD COLUMN created_by VARCHAR(255) DEFAULT NULL,
-ADD COLUMN updated_by VARCHAR(255) DEFAULT NULL;
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */
+;
+/*!50503 SET character_set_client = utf8mb4 */
+;
 
-select * from category;
+CREATE TABLE `category` (
+    `id` bigint NOT NULL AUTO_INCREMENT, `name` varchar(500) DEFAULT NULL, `image_url` text, `parent_id` bigint DEFAULT NULL, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `created_by` varchar(255) DEFAULT NULL, `updated_by` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`)
+)
 
-create table brand (
-    id bigint primary key auto_increment, name varchar(500), image_url text, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL
+DROP TABLE IF EXISTS `product`;
+
+CREATE TABLE `product` (
+    `id` bigint NOT NULL AUTO_INCREMENT, `name` varchar(500) DEFAULT NULL, `description` varchar(500) DEFAULT NULL, `technical_info` text, `product_info` text, `price` bigint DEFAULT NULL, `category_id` bigint DEFAULT NULL, `brand_id` bigint DEFAULT NULL, `images` text, `status` varchar(100) DEFAULT NULL, `quantity` int DEFAULT NULL, `discount` float DEFAULT NULL, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `created_by` varchar(255) DEFAULT NULL, `updated_by` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`)
 );
 
-create table rating (
-    id BIGINT primary key auto_increment, user_id BIGINT, product_id BIGINT, rating int, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL
+DROP TABLE IF EXISTS `rating`;
+
+CREATE TABLE `rating` (
+    `id` bigint NOT NULL AUTO_INCREMENT, `user_id` bigint DEFAULT NULL, `product_id` bigint DEFAULT NULL, `rating` int DEFAULT NULL, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `created_by` varchar(255) DEFAULT NULL, `updated_by` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`)
 );
 
-create table user (
-    id bigint primary key auto_increment, username varchar(500), first_name varchar(500), last_name varchar(500), email varchar(500), password varchar(500), address varchar(500), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+
+CREATE TABLE `role` (
+    `id` bigint NOT NULL AUTO_INCREMENT, `name` varchar(100) DEFAULT NULL, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`id`)
 );
 
-create table product (
-    id BIGINT primary key auto_increment, name varchar(500), description varchar(500), technical_info text, product_info text, price bigint, category_id bigint, brand_id bigint, images text, status varchar(100), quantity int, discount FLOAT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+    `id` bigint NOT NULL AUTO_INCREMENT, `username` varchar(500) DEFAULT NULL, `first_name` varchar(500) DEFAULT NULL, `last_name` varchar(500) DEFAULT NULL, `email` varchar(500) DEFAULT NULL, `password` varchar(500) DEFAULT NULL, `address` varchar(500) DEFAULT NULL, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `created_by` varchar(255) DEFAULT NULL, `updated_by` varchar(255) DEFAULT NULL, `phone_number` varchar(20) DEFAULT NULL, `role_id` bigint DEFAULT NULL, `avatar` text, `active` tinyint(1) DEFAULT NULL, PRIMARY KEY (`id`)
 );
 
-SELECT
-    c.id AS categoryId,
-    c.name AS categoryName,
-    c.image_url AS categoryImageUrl,
-    s.id AS subCategoryId,
-    s.name AS subCategoryName,
-    s.image_url AS subCategoryImageUrl, -- Add subcategory image URL
-    p.id AS productId,
-    p.name AS productName,
-    p.images AS productImages,
-    p.price AS productPrice,
-    p.discount AS productDiscount,
-    b.id AS brandId,
-    b.name AS brandName
-FROM
-    category c
-    LEFT JOIN category s ON c.id = s.parent_id
-    LEFT JOIN product p ON s.id = p.category_id
-    LEFT JOIN brand b ON p.brand_id = b.id;
-
-CREATE TABLE user (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100), first_name VARCHAR(100), last_name VARCHAR(100), email VARCHAR(100), address VARCHAR(500), avatar TEXT, role_id BIGINT, active BOOLEAN, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-alter table user add column avatar text;
-
-alter table user add column active BOOLEAN;
-
-alter table user add column phone_number VARCHAR(20);
-
-create table role (
-    id BIGINT PRIMARY KEY auto_increment, name varchar(100), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+create TABLE banner (
+    `id` bigint PRIMARY KEY NOT NULL AUTO_INCREMENT, `name` varchar(500) DEFAULT NULL, `image_url` text, redirect_url text, `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP, `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 insert into role (name) values ("ADMIN");
@@ -72,6 +62,6 @@ insert into role (name) values ("USER");
 
 insert into
     user (username, password, role_id)
-values ("ADMIN2", "123", 1);
+values ("ADMIN", "123", 1);
 
 select * from user;
