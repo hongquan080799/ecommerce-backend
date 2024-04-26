@@ -30,4 +30,4 @@ coverage/
 *.log
 
 # dotenv environment files
-# .env*
+.env
