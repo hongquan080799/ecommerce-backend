@@ -23,6 +23,18 @@ export const findAll = async (query: any) : Promise<Category[]> => {
         }
     })
 }
+export const findAllSubCategory = async () : Promise<Category[]> => {
+    return new Promise<Category[]>(async (resolve, reject) => {
+        try {
+            const [result] = await executeQuery("select * from category where parent_id is not null",)
+            if (result) {
+                resolve(categoryMapper.fromDBToModelList(result as []))
+            }
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
 
 export const findById = async (id: number) : Promise<Category> => {
     return new Promise<Category>(async (resolve, reject) => {

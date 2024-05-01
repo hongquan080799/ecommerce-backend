@@ -4,6 +4,7 @@ const router = Router()
 import jwt from 'jsonwebtoken';
 import * as service from '../service/UserService'
 import {authenticationToken} from '../middleware/AuthenticationMiddleWare'
+import { User } from '../model/User';
 require('dotenv').config(); 
 const SECRET: string | undefined = process.env.JWT_SCRETE_KEY
 
@@ -64,12 +65,29 @@ router.post('/', authenticationToken, async (req: any, res) =>{
     throw error
   }
 })
+router.post('/register', async (req: any, res) => {
+  try {
+    logger.info('Register user data')
+    const defaultRoleId = 3;
+    const user: User = req.body
+    user.role = {
+      id: defaultRoleId,
+      name: 'USER'
+    }
+    const saveData = await service.saveUser(req.body)
+    res.json(saveData)
+  } catch (error:any) {
+    console.log('error saving user data')
+    console.log(error)
+    res.status(500).json({ error: error.message });
+  }
+})
 
 router.put('/', authenticationToken, async (req: any, res) =>{
   try {
     logger.info('update user data')
     const user = req.user
-    if(user.role.name !== 'ADMIN') {
+    if(user.role.name !== 'ADMIN' && user.username !== req.body.username) {
         throw new Error(`User not admin`)
     }
     const saveData = await service.updateUser(req.body)
@@ -130,7 +148,7 @@ router.post('/login', async (req, res) =>{
 
 
   } catch (error: any) {
-    res.json({message : error.message})
+    res.status(500).json({message : error.message})
   }
 })
 

@@ -48,7 +48,7 @@ export const saveUser = async (user: User) : Promise<any> => {
     return new Promise<any>(async (resolve, reject) => {
         try {
             const [result] = await executeWithParams("insert into user (username, password, first_name, last_name, email, phone_number, address, avatar, role_id, active) values(?,?,?,?,?,?,?,?,?,?)",
-             [user.username, user.password, user.firstName, user.lastName, user.email, user.phoneNumber, user.address, user.avatar, user.role.id, true])
+             [user.username, user.password, user.firstName, user.lastName, user.email, user.phoneNumber, user.address, user.avatar, user.role.id , true])
             resolve(result)
         } catch (err) {
             reject(err)

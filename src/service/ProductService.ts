@@ -31,7 +31,6 @@ export const findById = async (id: number) : Promise<Product> => {
 }
 
 export const saveProduct = async (product: Product) : Promise<any> => {
-    console.log(product)
     return new Promise<any>(async (resolve, reject) => {
         try {
             const [result] = await executeWithParams(
@@ -141,7 +140,7 @@ export const getProductPopularsByCategory = async () : Promise<PopularProductWit
                 category c
             LEFT JOIN 
                 category s ON c.id = s.parent_id
-            LEFT JOIN 
+            JOIN 
                 product p ON s.id = p.category_id
             LEFT JOIN 
                 brand b ON p.brand_id = b.id
