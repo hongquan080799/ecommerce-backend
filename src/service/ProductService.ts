@@ -18,7 +18,7 @@ export const findAll = async (query: any) : Promise<Product[]> => {
 export const findById = async (id: number) : Promise<Product> => {
     return new Promise<Product>(async (resolve, reject) => {
         try {
-            const [rows] = await executeWithParams("select p.*, c.name as category_name, b.name as brand_name from product p join category c on p.category_id = c.id join brand b on p.brand_id = b.id where p.id = ?", [id])
+            const [rows] = await executeWithParams("select p.*, c.name as category_name, b.name as brand_name from product p left join category c on p.category_id = c.id left join brand b on p.brand_id = b.id where p.id = ?", [id])
             if (rows && (rows as []).length > 0) {
                 resolve(productMapper.fromDBToModel((rows as any)[0]))
             } else {
