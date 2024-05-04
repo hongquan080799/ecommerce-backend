@@ -5,7 +5,7 @@ import { PopularProductWithCat } from "../types/PopularProductWithCat"
 export const findAll = async (query: any) : Promise<Product[]> => {
     return new Promise<Product[]>(async (resolve, reject) => {
         try {
-            const [result] = await executeQuery("select p.*, c.name as category_name, b.name as brand_name from product p join category c on p.category_id = c.id join brand b on p.brand_id = b.id ")
+            const [result] = await executeQuery("select p.*, c.name as category_name, b.name as brand_name from product p left join category c on p.category_id = c.id left join brand b on p.brand_id = b.id ")
             if (result) {
                 resolve(productMapper.fromDBToModelList(result as []))
             }
