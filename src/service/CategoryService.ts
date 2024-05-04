@@ -101,7 +101,7 @@ export const findCategoryTreeBySubId = async (id: number): Promise<CatTree> => {
                 const parentRow = (result[0] as any)[0]
                 const resultChild = await executeWithParams("select * from category where parent_id = ?", [parentRow.id])
                 const chileRows = resultChild[0] as []
-                const productByCat = await executeWithParams("select p.*, b.name as brand_name from product p join brand b on p.brand_id = b.id where p.category_id = ?", [id] )
+                const productByCat = await executeWithParams("select p.*, b.name as brand_name from product p left join brand b on p.brand_id = b.id where p.category_id = ?", [id] )
                 const brandList = await executeWithParams("select b.id, b.name, b.image_url from product p join brand b on p.brand_id = b.id where p.category_id = ? group by b.id, b.name, b.image_url", [id] )
                 const returnResult: CatTree = {
                     id: parentRow.id,
